@@ -1,0 +1,10 @@
+import "BasicObject", "./basic_object"
+
+export default class Scene < BasicObject
+  NAME_SCENE = "Scene"
+
+  def initialize
+    super
+    this.id = "scene_r"
+  end
+end

@@ -1,0 +1,143 @@
+import "Dispatcher", "../dispatcher"
+import "Scene", "./scene"
+
+export default class BasicObject < Dispatcher
+  attr_reader :id, :parent, :children
+  attr_writer :id, :parent
+
+  def initialize
+    super
+
+    @id = undefined
+		@parent = nil
+		@children = []
+  end
+
+  def add object, id = undefined
+    if object == self
+      console.error "#{self.class.name}.add: object can't be added as a child of itself."
+      return self
+    end
+
+    if object
+      unless object.parent == nil
+        object.parent.remove(object)
+      end
+
+      object.parent = self
+
+      if object.id == undefined
+        object.id = id
+      end
+
+      @children.push(object)
+      # TODO: updateGlobalPosition
+      add_signals(object)
+    else
+      console.error "#{self.class.name}.add: object not an instance of #{self.class.name}"
+    end
+
+    return self
+  end
+
+  def add_signals object
+    # Added
+    if defined? object.ready
+      object.connect(Dispatcher::ADDED, lambda do |obj|  # fn ready
+        obj.ready
+
+        # TODO: What it is?
+        # if object.id
+        #   get_scene(true).emit_signal(Dispatcher::READY, object.id)
+        # end
+      end)
+      object.emit_signal(Dispatcher::ADDED, object )
+    end
+
+    # Update
+    if defined? object.update
+      get_scene(true).connect(Dispatcher::UPDATE, lambda do |dt|
+        object.update dt
+      end)
+    end
+
+    # Draw
+    if defined? object.draw
+      get_scene(true).connect(Dispatcher::DRAW, lambda do |ren|
+        object.draw ren
+      end)
+    end
+  end
+
+  def remove object
+    index = @children.indexOf(object)
+    unless index == -1
+      object.id = undefined
+      object.parent = nil
+      @children.splice(index, 1)
+    end
+
+    return self
+  end
+
+  def free
+    if @children.length > 0
+      @children.forEach do |child|
+        child.free
+      end
+    else
+      if @parent
+        free_signals
+        @parent.remove(self)
+      end
+    end
+
+    if @parent
+      @parent.free
+    end
+  end
+
+  def free_signals
+    this.signals = nil
+  end
+
+  def get_scene(is_root = false)
+    _scene  = self
+    _parent = _scene.parent
+
+    while true
+      if is_root
+        if _parent == nil
+          break
+        end
+      else
+        super_class_name = Object.getPrototypeOf(
+                           Object.getPrototypeOf(_parent)).constructor.name
+
+        if _parent.constructor.name == Scene::NAME_SCENE ||
+           super_class_name == Scene::NAME_SCENE
+          _scene  = _parent
+          break  
+        end
+      end
+
+      _scene  = _parent
+      _parent = _scene.parent
+    end
+
+    return _scene 
+  end
+
+  def find_child(id)
+    result = nil
+    for i in @children
+      child = @children[i]
+      if child.id == id
+        result = child
+        break
+      end
+    end
+
+    return result
+  end
+end

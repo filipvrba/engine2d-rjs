@@ -1,0 +1,13 @@
+import '../css/style.css'
+import "Scene", './core/objects/scene'
+import "BasicObject", './core/objects/basic_object'
+# import "Dispatcher", "./core/dispatcher"
+
+scene = Scene.new
+obj   = BasicObject.new
+obj_b   = BasicObject.new
+
+scene.add obj, "tobj"
+scene.add obj_b, "test"
+# console.log scene
+console.log obj.get_scene(false)
