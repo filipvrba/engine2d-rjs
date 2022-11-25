@@ -1,5 +1,6 @@
 import Scene from "../core/objects/scene";
 import TDRenderer from "../core/td_renderer";
+import Vector2 from "../core/math/vector2";
 
 export default class Canvas2DElement extends HTMLElement {
   get scene_r() {
@@ -8,10 +9,15 @@ export default class Canvas2DElement extends HTMLElement {
 
   constructor() {
     super();
-    this._resizeHandler = () => this.resize;
+
+    this._resizeHandler = () => {
+      return this.resize()
+    };
+
     this._renderer = new TDRenderer(this.init_canvas("c2d"));
-    this.resize;
-    this._scene_r = new Scene
+    this._scene_r = new Scene;
+    this._scene_r.ready;
+    this.resize()
   };
 
   init_canvas(id) {
@@ -42,8 +48,16 @@ export default class Canvas2DElement extends HTMLElement {
     })
   };
 
-  get resize() {
-    return this._renderer.set_size(window.innerWidth, window.innerHeight)
+  resize() {
+    this._renderer.set_size(window.innerWidth, window.innerHeight);
+    this._scene_r.emit_signal(Canvas2DElement.RESIZE);
+    this._scene_r.update_world()
+  };
+
+  get win_center_position() {
+    let widthHalf = this._renderer._canvas.width / 2;
+    let heightHalf = this._renderer._canvas.height / 2;
+    return new Vector2(widthHalf, heightHalf)
   };
 
   connectedCallback() {

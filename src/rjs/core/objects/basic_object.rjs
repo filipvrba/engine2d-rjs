@@ -43,7 +43,7 @@ export default class BasicObject < Dispatcher
   def add_signals object
     # Added
     if defined? object.ready
-      obj.ready
+      object.ready()
     end
 
     # Update

@@ -52,7 +52,7 @@ export default class BasicObject extends Dispatcher {
 
   add_signals(object) {
     // Added
-    if (typeof object.ready !== 'undefined') obj.ready;
+    if (typeof object.ready !== 'undefined') object.ready();
 
     // Update
     if (typeof object.update !== 'undefined') {
