@@ -3,7 +3,8 @@ import "Scene", './core/objects/scene'
 import "BasicObject", './core/objects/basic_object'
 import "TDRenderer", "./core/td_renderer"
 
-document.querySelector('#app').innerHTML = "<canvas id='c2d'></canvas>"
+document.querySelector('#app').innerHTML = "<canvas-2d></canvas-2d>"
+canvas_2d = document.querySelector('canvas-2d')
 
 class Box < BasicObject
   def ready
@@ -33,29 +34,7 @@ class Circle < BasicObject
   end
 end
 
-renderer = TDRenderer.new document.getElementById('c2d')
-renderer.set_size(window.innerWidth, window.innerHeight)
-
-scene_r = Scene.new
 box = Box.new
-circle = Circle.new
+canvas_2d.scene_r.add box, "box"
 
-scene_r.add box, "box"
-scene_r.add circle, "circle"
-
-i = 0
-is_call = false
-def tick
-  renderer.render scene_r
-  requestAnimationFrame lambda { tick() }
-
-  if i > 10 and is_call == false
-    is_call = true
-    scene_r.free
-    console.log box
-    console.log circle
-    console.log scene_r
-  end
-  i += 1
-end
-tick()
+console.log canvas_2d.scene_r

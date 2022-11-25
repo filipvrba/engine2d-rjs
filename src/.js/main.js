@@ -2,7 +2,8 @@ import "../css/style.css";
 import Scene from "./core/objects/scene";
 import BasicObject from "./core/objects/basic_object";
 import TDRenderer from "./core/td_renderer";
-document.querySelector("#app").innerHTML = "<canvas id='c2d'></canvas>";
+document.querySelector("#app").innerHTML = "<canvas-2d></canvas-2d>";
+let canvas_2d = document.querySelector("canvas-2d");
 
 class Box extends BasicObject {
   get ready() {
@@ -28,29 +29,6 @@ class Circle extends BasicObject {
   draw(r) {}
 };
 
-let renderer = new TDRenderer(document.getElementById("c2d"));
-renderer.set_size(window.innerWidth, window.innerHeight);
-let scene_r = new Scene;
 let box = new Box;
-let circle = new Circle;
-scene_r.add(box, "box");
-scene_r.add(circle, "circle");
-let i = 0;
-let is_call = false;
-
-function tick() {
-  renderer.render(scene_r);
-  requestAnimationFrame(() => tick());
-
-  if (i > 10 && is_call == false) {
-    is_call = true;
-    scene_r.free;
-    console.log(box);
-    console.log(circle);
-    console.log(scene_r)
-  };
-
-  i++
-};
-
-tick()
+canvas_2d.scene_r.add(box, "box");
+console.log(canvas_2d.scene_r)
