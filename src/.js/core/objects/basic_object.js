@@ -52,25 +52,22 @@ export default class BasicObject extends Dispatcher {
 
   add_signals(object) {
     // Added
-    if (typeof object.ready !== 'undefined') {
-      object.connect(Dispatcher.ADDED, obj => obj.ready);
-      object.emit_signal(Dispatcher.ADDED, object)
-    };
+    if (typeof object.ready !== 'undefined') obj.ready;
 
     // Update
     if (typeof object.update !== 'undefined') {
+      object.update_handler = dt => object.update(dt);
+
       this.get_scene(true).connect(
         Dispatcher.UPDATE,
-        dt => object.update(dt)
+        object.update_handler
       )
     };
 
     // Draw
     if (typeof object.draw !== 'undefined') {
-      this.get_scene(true).connect(
-        Dispatcher.DRAW,
-        ren => object.draw(ren)
-      )
+      object.draw_handler = ren => object.draw(ren);
+      this.get_scene(true).connect(Dispatcher.DRAW, object.draw_handler)
     }
   };
 
@@ -88,7 +85,8 @@ export default class BasicObject extends Dispatcher {
 
   get free() {
     if (this._children.length > 0) {
-      this._children.forEach(child => child.free)
+      let _children = this._children.slice();
+      _children.forEach(child => child.free)
     } else if (this._parent) {
       this.free_signals;
       this._parent.remove(this)
@@ -98,7 +96,20 @@ export default class BasicObject extends Dispatcher {
   };
 
   get free_signals() {
-    return this.signals = null
+    // this.signals = nil
+    if (typeof this.update !== 'undefined') {
+      this.get_scene(true).disconnect(
+        Dispatcher.UPDATE,
+        this.update_handler
+      )
+    };
+
+    if (typeof this.draw !== 'undefined') {
+      return this.get_scene(true).disconnect(
+        Dispatcher.DRAW,
+        this.draw_handler
+      )
+    }
   };
 
   get_scene(is_root=false) {

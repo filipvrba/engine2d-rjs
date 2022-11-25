@@ -1,13 +1,61 @@
 import '../css/style.css'
 import "Scene", './core/objects/scene'
 import "BasicObject", './core/objects/basic_object'
-# import "Dispatcher", "./core/dispatcher"
+import "TDRenderer", "./core/td_renderer"
 
-scene = Scene.new
-obj   = BasicObject.new
-obj_b   = BasicObject.new
+document.querySelector('#app').innerHTML = "<canvas id='c2d'></canvas>"
 
-scene.add obj, "tobj"
-scene.add obj_b, "test"
-# console.log scene
-console.log obj.get_scene(false)
+class Box < BasicObject
+  def ready
+    console.log this.id
+  end
+
+  def update dt
+    # console.log dt
+  end
+
+  def draw r
+    # console.log r
+  end
+end
+
+class Circle < BasicObject
+  def ready
+    console.log this.id
+  end
+
+  def update dt
+    # console.log dt
+  end
+
+  def draw r
+    # console.log r
+  end
+end
+
+renderer = TDRenderer.new document.getElementById('c2d')
+renderer.set_size(window.innerWidth, window.innerHeight)
+
+scene_r = Scene.new
+box = Box.new
+circle = Circle.new
+
+scene_r.add box, "box"
+scene_r.add circle, "circle"
+
+i = 0
+is_call = false
+def tick
+  renderer.render scene_r
+  requestAnimationFrame lambda { tick() }
+
+  if i > 10 and is_call == false
+    is_call = true
+    scene_r.free
+    console.log box
+    console.log circle
+    console.log scene_r
+  end
+  i += 1
+end
+tick()

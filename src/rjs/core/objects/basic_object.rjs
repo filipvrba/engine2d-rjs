@@ -43,29 +43,19 @@ export default class BasicObject < Dispatcher
   def add_signals object
     # Added
     if defined? object.ready
-      object.connect(Dispatcher::ADDED, lambda do |obj|  # fn ready
-        obj.ready
-
-        # TODO: What it is?
-        # if object.id
-        #   get_scene(true).emit_signal(Dispatcher::READY, object.id)
-        # end
-      end)
-      object.emit_signal(Dispatcher::ADDED, object )
+      obj.ready
     end
 
     # Update
     if defined? object.update
-      get_scene(true).connect(Dispatcher::UPDATE, lambda do |dt|
-        object.update dt
-      end)
+      object.update_handler = lambda { |dt| object.update dt }
+      get_scene(true).connect(Dispatcher::UPDATE, object.update_handler)
     end
 
     # Draw
     if defined? object.draw
-      get_scene(true).connect(Dispatcher::DRAW, lambda do |ren|
-        object.draw ren
-      end)
+      object.draw_handler = lambda { |ren| object.draw ren }
+      get_scene(true).connect(Dispatcher::DRAW, object.draw_handler)
     end
   end
 
@@ -82,7 +72,8 @@ export default class BasicObject < Dispatcher
 
   def free
     if @children.length > 0
-      @children.forEach do |child|
+      _children = @children.slice()  # Clone array
+      _children.forEach do |child|
         child.free
       end
     else
@@ -98,7 +89,14 @@ export default class BasicObject < Dispatcher
   end
 
   def free_signals
-    this.signals = nil
+    # this.signals = nil
+    if defined? this.update
+      get_scene(true).disconnect(Dispatcher::UPDATE, this.update_handler)
+    end
+
+    if defined? this.draw
+      get_scene(true).disconnect(Dispatcher::DRAW, this.draw_handler)
+    end
   end
 
   def get_scene(is_root = false)
