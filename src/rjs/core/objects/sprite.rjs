@@ -1,0 +1,27 @@
+import "Object2D", './object2d'
+import "Vector2", '../math/vector2'
+
+export default class Sprite < Object2D
+  attr_accessor :scale, :type, :img
+
+  def initialize type
+    super
+
+    @scale = 1
+    @type = type
+    @img = nil
+  end
+
+  def ready()
+    if @type 
+      this.position = Vector2.new(-((@type[2] * @scale)/2), -((@type[3] * @scale)/2))
+    end
+  end
+
+  def draw r
+    if @img and @type
+      r.drawImage(@img, @type[0], @type[1], @type[2], @type[3],
+        this.global_position.x, this.global_position.y, @type[2] * @scale, @type[3] * @scale)
+    end
+  end
+end
