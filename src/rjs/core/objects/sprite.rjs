@@ -4,24 +4,24 @@ import "Vector2", '../math/vector2'
 export default class Sprite < Object2D
   attr_accessor :scale, :type, :img
 
-  def initialize type
+  def initialize s_sprite
     super
 
     @scale = 1
-    @type = type
+    @s_sprite = s_sprite
     @img = nil
   end
 
   def ready()
-    if @type 
-      this.position = Vector2.new(-((@type[2] * @scale)/2), -((@type[3] * @scale)/2))
+    if @s_sprite 
+      this.position = Vector2.new(-((@s_sprite.size.w * @scale)/2), -((@s_sprite.size.h * @scale)/2))
     end
   end
 
   def draw r
-    if @img and @type
-      r.drawImage(@img, @type[0], @type[1], @type[2], @type[3],
-        this.global_position.x, this.global_position.y, @type[2] * @scale, @type[3] * @scale)
+    if @img and @s_sprite
+      r.drawImage(@img, @s_sprite.position.x, @s_sprite.position.y, @s_sprite.size.w, @s_sprite.size.h,
+        this.global_position.x, this.global_position.y, @s_sprite.size.w * @scale, @s_sprite.size.h * @scale)
     end
   end
 end

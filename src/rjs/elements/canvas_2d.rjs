@@ -13,7 +13,7 @@ export default class Canvas2DElement < HTMLElement
 
     @renderer = TDRenderer.new init_canvas("c2d")
     @scene_r = Scene.new
-    @scene_r.ready
+    @scene_r.ready()
     resize()  # change renderer size
   end
 
