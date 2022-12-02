@@ -2,14 +2,15 @@ import "BasicObject", './basic_object'
 import "Vector2", '../math/vector2'
 
 export default class Object2D < BasicObject
-  attr_reader :position
-  attr_writer :position, :global_position
+  attr_accessor :position, :scale
+  attr_writer :global_position
 
   def initialize
     super
 
     @position = Vector2.new
     @global_position = Vector2.new
+    @scale = 1
   end
 
   def global_position

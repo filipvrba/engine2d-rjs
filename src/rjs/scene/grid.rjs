@@ -1,14 +1,14 @@
-import "BasicObject", './basic_object'
+import "BasicObject", '../core/objects/basic_object'
 
 export default class Grid < BasicObject
   attr_accessor :scale, :visible
 
-  def initialize vector
+  def initialize size_v
     super
 
-    @vector = vector
+    @size_v = size_v
     @scale = 1
-    @visible = visible
+    @visible = true
   end
 
   def draw r
@@ -16,8 +16,8 @@ export default class Grid < BasicObject
       return
     end
 
-    x = @vector.x * @scale
-    y = @vector.y * @scale
+    x = @size_v.w * @scale
+    y = @size_v.h * @scale
     r.lineWidth = 1
 
     # x

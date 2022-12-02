@@ -46,6 +46,12 @@ export default class BasicObject < Dispatcher
       object.ready()
     end
 
+    # Physics Update
+    if defined? object.physics_update
+      object.physics_update_handler = lambda { |dt| object.physics_update dt }
+      get_scene(true).connect(Dispatcher::PHYSICS_UPDATE, object.physics_update_handler)
+    end
+
     # Update
     if defined? object.update
       object.update_handler = lambda { |dt| object.update dt }
@@ -90,12 +96,16 @@ export default class BasicObject < Dispatcher
 
   def free_signals
     # this.signals = nil
-    if defined? this.update
-      get_scene(true).disconnect(Dispatcher::UPDATE, this.update_handler)
+    if defined? self.physics_update
+      get_scene(true).disconnect(Dispatcher::PHYSICS_UPDATE, self.physics_update_handler)
     end
 
-    if defined? this.draw
-      get_scene(true).disconnect(Dispatcher::DRAW, this.draw_handler)
+    if defined? self.update
+      get_scene(true).disconnect(Dispatcher::UPDATE, self.update_handler)
+    end
+
+    if defined? self.draw
+      get_scene(true).disconnect(Dispatcher::DRAW, self.draw_handler)
     end
   end
 

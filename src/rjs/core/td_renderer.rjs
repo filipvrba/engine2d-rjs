@@ -21,7 +21,9 @@ export default class TDRenderer
   def render scene
     renderer.clearRect(0, 0, @canvas.width, @canvas.height)
 
+    scene.emit_signal(Dispatcher::UPDATE, @clock.delta_time() do |f_dt|
+      scene.emit_signal Dispatcher::PHYSICS_UPDATE, f_dt
+    end)
     scene.emit_signal Dispatcher::DRAW, renderer
-    scene.emit_signal Dispatcher::UPDATE, @clock.delta_time
   end
 end

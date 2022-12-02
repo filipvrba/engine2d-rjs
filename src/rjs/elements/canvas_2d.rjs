@@ -1,6 +1,7 @@
 import "Scene", '../core/objects/scene'
 import "TDRenderer", "../core/td_renderer"
 import "Vector2", "../core/math/vector2"
+import "Grid", "../scene/grid"
 
 export default class Canvas2DElement < HTMLElement
   RESIZE = "resize"

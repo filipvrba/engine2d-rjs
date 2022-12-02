@@ -1,0 +1,15 @@
+import "Scene", '../core/objects/scene'
+import "Vector2", '../core/math/vector2'
+
+export default class Level < Scene
+  def self.dimension_loop(dimension, &callback)
+    i = 0
+    (0...dimension.h).step(1) do |y|
+      (0...dimension.w).step(1) do |x|
+        vec = Vector2.new(x, y)
+        callback(vec, i)
+        i += 1
+      end
+    end
+  end
+end

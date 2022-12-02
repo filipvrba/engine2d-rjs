@@ -1,5 +1,5 @@
-import "Object2D", './object2d'
-import "Vector2", '../math/vector2'
+import "Object2D", '../core/objects/object2d'
+import "Vector2", '../core/math/vector2'
 
 export default class Sprite < Object2D
   attr_accessor :scale, :type, :img

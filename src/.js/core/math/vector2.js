@@ -3,12 +3,12 @@ export default class Vector2 {
     return this._x
   };
 
-  get y() {
-    return this._y
-  };
-
   set x(x) {
     this._x = x
+  };
+
+  get y() {
+    return this._y
   };
 
   set y(y) {
@@ -18,6 +18,14 @@ export default class Vector2 {
   constructor(x=0, y=0) {
     this._x = x;
     this._y = y
+  };
+
+  get w() {
+    return this._x
+  };
+
+  get h() {
+    return this._y
   };
 
   get length() {

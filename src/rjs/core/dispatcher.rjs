@@ -1,8 +1,9 @@
 export default class Dispatcher
-  ADDED  = "added"
-  READY  = "ready"
-  UPDATE = "update"
-  DRAW   = "draw"
+  ADDED          = "added"
+  READY          = "ready"
+  UPDATE         = "update"
+  DRAW           = "draw"
+  PHYSICS_UPDATE = "physics_update"
 
   attr_reader :signals
   attr_writer :signals

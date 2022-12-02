@@ -6,8 +6,12 @@ export default class Scene extends Object2D {
     this.id = "scene_r"
   };
 
-  get ready() {
-    if (!this.parent) return this.global_position = this.position
+  ready() {
+    if (this.parent) {
+      this.update_global_position()
+    } else {
+      this.global_position = this.position
+    }
   }
 };
 
