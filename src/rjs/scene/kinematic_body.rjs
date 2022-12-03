@@ -1,0 +1,36 @@
+import "Object2D", '../core/objects/object_2d'
+import "Vector2", '../core/math/vector2'
+
+export default class KinematicBody < Object2D
+  attr_reader :physics_direction, :is_move, :is_move_vertical
+
+  def initialize
+    super
+
+    @previoud_position = Vector2.new
+    @physics_direction = Vector2.new
+
+    @is_move          = false
+    @is_move_vertical = false
+  end
+
+  def update dt
+    @previoud_position = self.position.clone
+  end
+
+  def physics_update dt
+    @physics_direction = self.position.clone.sub(@previoud_position).normalized
+
+    if @physics_direction.equals(Vector2.new)
+      @is_move = false
+    else
+      @is_move = true
+    end
+
+    if @physics_direction.equals(Vector2::UP) or @physics_direction.equals(Vector2::DOWN)
+      @is_move_ladder = true
+    elsif @physics_direction.equals(Vector2::LEFT) or @physics_direction.equals(Vector2::RIGHT)
+      @is_move_ladder = false
+    end
+  end
+end

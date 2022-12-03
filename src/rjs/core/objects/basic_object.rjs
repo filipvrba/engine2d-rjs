@@ -31,7 +31,11 @@ export default class BasicObject < Dispatcher
       end
 
       @children.push(object)
-      # TODO: updateGlobalPosition
+      
+      if defined? object.update_global_position
+        object.update_global_position()
+      end
+
       add_signals(object)
     else
       console.error "#{self.class.name}.add: object not an instance of #{self.class.name}"

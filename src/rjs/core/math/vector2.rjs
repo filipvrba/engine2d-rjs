@@ -1,4 +1,10 @@
 export default class Vector2
+	UP    = Vector2.new( 0, -1)
+	DOWN  = Vector2.new( 0,  1)
+	LEFT  = Vector2.new(-1,  0)
+	RIGHT = Vector2.new( 1,  0)
+	ZERO  = Vector2.new( 0,  0)
+
 	attr_accessor :x, :y
 
   def initialize x = 0, y = 0

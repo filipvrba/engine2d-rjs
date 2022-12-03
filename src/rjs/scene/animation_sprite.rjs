@@ -4,7 +4,7 @@ import "Sprite", './sprite'
 
 export default class AnimationSprite < Object2D
   attr_accessor :frame_speed
-  attr_reader :curent_tile
+  attr_reader :current_tile
 
   def initialize frame_speed = 0.25
     super
@@ -14,7 +14,7 @@ export default class AnimationSprite < Object2D
     @tiles  = BasicObject.new
     @sprite = Sprite.new
 
-    @curent_tile = nil
+    @current_tile = nil
     @bitwase = 0
     @scale = 1
     @time = 0
@@ -42,7 +42,7 @@ export default class AnimationSprite < Object2D
     unless is_update_unlock
       return
     end
-    if @curent_tile == nil
+    if @current_tile == nil
       return
     end
 
@@ -53,8 +53,8 @@ export default class AnimationSprite < Object2D
     @time += dt
     if @time >= @frame_speed
       @time = 0
-      @curent_tile.id_tile = (@curent_tile.id_tile + 1) % Object.keys(@curent_tile.sprites).length
-      @sprite.s_sprite = @curent_tile.sprites[@curent_tile.id_tile]
+      @current_tile.id_tile = (@current_tile.id_tile + 1) % Object.keys(@current_tile.sprites).length
+      @sprite.s_sprite = @current_tile.sprites[@current_tile.id_tile]
     end
   end
 
@@ -69,16 +69,16 @@ export default class AnimationSprite < Object2D
   end
 
   def play_tile id_tile
-    @curent_tile = @tiles.find_child(id_tile)
+    @current_tile = @tiles.find_child(id_tile)
 
-    if @curent_tile == nil
+    if @current_tile == nil
       console.error "Since this tile '#{id_tile}', isn't on the list, it won't launch. " +
                     "Add it, please."
       return
     end
 
-    @curent_tile.id_tile = 0
-    @sprite.img = @curent_tile.img
+    @current_tile.id_tile = 0
+    @sprite.img = @current_tile.img
   end
 
   def free()
