@@ -19,6 +19,7 @@ export default class Grid < BasicObject
     x = @size_v.w * @scale
     y = @size_v.h * @scale
     r.lineWidth = 1
+    r.strokeStyle = "black"
 
     # x
     (0...r.canvas.width / x).step(1) do |i|

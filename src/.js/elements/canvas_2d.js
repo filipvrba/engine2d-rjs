@@ -15,11 +15,9 @@ export default class Canvas2DElement extends HTMLElement {
       return this.resize()
     };
 
-    this._grid = new Grid(new Vector2(16, 16));
     this._renderer = new TDRenderer(this.init_canvas("c2d"));
     this._scene_r = new Scene;
     this._scene_r.ready();
-    this._scene_r.add(this._grid);
     this.resize()
   };
 

@@ -38,7 +38,7 @@ export default class BasicObject extends Dispatcher {
     if (object) {
       if (object.parent != null) object.parent.remove(object);
       object.parent = this;
-      if (object.id == undefined) object.id = id;
+      if (id != undefined) object.id = id;
       this._children.push(object);
 
       // TODO: updateGlobalPosition
@@ -53,6 +53,16 @@ export default class BasicObject extends Dispatcher {
   add_signals(object) {
     // Added
     if (typeof object.ready !== 'undefined') object.ready();
+
+    // Physics Update
+    if (typeof object.physics_update !== 'undefined') {
+      object.physics_update_handler = dt => object.physics_update(dt);
+
+      this.get_scene(true).connect(
+        Dispatcher.PHYSICS_UPDATE,
+        object.physics_update_handler
+      )
+    };
 
     // Update
     if (typeof object.update !== 'undefined') {
@@ -97,6 +107,13 @@ export default class BasicObject extends Dispatcher {
 
   get free_signals() {
     // this.signals = nil
+    if (typeof this.physics_update !== 'undefined') {
+      this.get_scene(true).disconnect(
+        Dispatcher.PHYSICS_UPDATE,
+        this.physics_update_handler
+      )
+    };
+
     if (typeof this.update !== 'undefined') {
       this.get_scene(true).disconnect(
         Dispatcher.UPDATE,
@@ -121,8 +138,10 @@ export default class BasicObject extends Dispatcher {
         if (_parent == null) break
       } else {
         let super_class_name = Object.getPrototypeOf(Object.getPrototypeOf(_parent)).constructor.name;
+        let is_scene_name = _parent.constructor.name == Scene.NAME_SCENE || super_class_name == Scene.NAME_SCENE;
+        let is_level_name = _parent.constructor.name == "Level" || super_class_name == "Level";
 
-        if (_parent.constructor.name == Scene.NAME_SCENE || super_class_name == Scene.NAME_SCENE) {
+        if (is_scene_name || is_level_name) {
           _scene = _parent;
           break
         }
@@ -135,18 +154,40 @@ export default class BasicObject extends Dispatcher {
     return _scene
   };
 
-  find_child(id) {
-    let result = null;
+  // def get_scene(is_root = false)
+  //   _scene  = self
+  //   _parent = _scene.parent
+  //   while true
+  //   if is_root
+  //     if _parent == nil
+  //       break
+  //     end
+  //   else
+  //     super_class_name = Object.getPrototypeOf(
+    //                        Object.getPrototypeOf(_parent)).constructor.name
+    //     if _parent.constructor.name == Scene::NAME_SCENE ||
+    //        super_class_name == Scene::NAME_SCENE
+    //       _scene = _parent
+    //       break  
+    //     end
+    //   end
+    //   _scene  = _parent
+    //   _parent = _scene.parent
+    // end
+    // return _scene 
+    // end
+    find_child(id) {
+      let result = null;
 
-    for (let i in this._children) {
-      let child = this._children[i];
+      for (let i in this._children) {
+        let child = this._children[i];
 
-      if (child.id == id) {
-        result = child;
-        break
-      }
-    };
+        if (child.id == id) {
+          result = child;
+          break
+        }
+      };
 
-    return result
+      return result
+    }
   }
-}

@@ -1,0 +1,92 @@
+import "BasicObject", '../core/objects/basic_object'
+import "Object2D", '../core/objects/object_2d'
+import "Sprite", './sprite'
+
+export default class AnimationSprite < Object2D
+  attr_accessor :frame_speed
+  attr_reader :curent_tile
+
+  def initialize frame_speed = 0.25
+    super
+    @handlers = {}
+    @handlers_length = lambda { Object.keys(@handlers).length }
+
+    @tiles  = BasicObject.new
+    @sprite = Sprite.new
+
+    @curent_tile = nil
+    @bitwase = 0
+    @scale = 1
+    @time = 0
+    @frame_speed = frame_speed
+  end
+
+  def ready()
+    self.add @tiles, 'tiles'
+
+    @sprite.scale = @scale
+    self.add @sprite, 'sprite'
+  end
+
+  def is_update_unlock
+    result = true
+    @tiles.children.forEach do |t|
+      if Math.pow( @handlers_length.call() + 1, 2) & @handlers[t.id].bit == 0
+        result = false
+      end
+    end
+    return result
+  end
+
+  def update dt
+    unless is_update_unlock
+      return
+    end
+    if @curent_tile == nil
+      return
+    end
+
+    # unsafe
+    self.global_position = self.parent.global_position
+    # end
+
+    @time += dt
+    if @time >= @frame_speed
+      @time = 0
+      @curent_tile.id_tile = (@curent_tile.id_tile + 1) % Object.keys(@curent_tile.sprites).length
+      @sprite.s_sprite = @curent_tile.sprites[@curent_tile.id_tile]
+    end
+  end
+
+  def add_tile tile
+    @handlers[tile.id] = {
+      "bit": Math.pow( @handlers_length.call() + 1, 2),
+      "fn": lambda { @bitwase |= @handlers[tile.id].bit }
+    }
+
+    tile.connect(Tile::SPRITE_READY, @handlers[tile.id].fn)
+    @tiles.add tile, tile.id
+  end
+
+  def play_tile id_tile
+    @curent_tile = @tiles.find_child(id_tile)
+
+    if @curent_tile == nil
+      console.error "Since this tile '#{id_tile}', isn't on the list, it won't launch. " +
+                    "Add it, please."
+      return
+    end
+
+    @curent_tile.id_tile = 0
+    @sprite.img = @curent_tile.img
+  end
+
+  def free()
+    @tiles.children.forEach do |t|
+      t.disconnect(Tile::SPRITE_READY, @handlers[t.id].fn)
+    end
+    @handlers = nil
+
+    super
+  end
+end

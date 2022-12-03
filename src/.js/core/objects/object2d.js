@@ -10,6 +10,14 @@ export default class Object2D extends BasicObject {
     this._position = position
   };
 
+  get scale() {
+    return this._scale
+  };
+
+  set scale(scale) {
+    this._scale = scale
+  };
+
   set global_position(global_position) {
     this._global_position = global_position
   };
@@ -17,7 +25,8 @@ export default class Object2D extends BasicObject {
   constructor() {
     super();
     this._position = new Vector2;
-    this._global_position = new Vector2
+    this._global_position = new Vector2;
+    this._scale = 1
   };
 
   get global_position() {

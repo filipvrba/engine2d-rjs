@@ -10,12 +10,12 @@ export default class Sprite extends Object2D {
     this._scale = scale
   };
 
-  get type() {
-    return this._type
+  get s_sprite() {
+    return this._s_sprite
   };
 
-  set type(type) {
-    this._type = type
+  set s_sprite(s_sprite) {
+    this._s_sprite = s_sprite
   };
 
   get img() {

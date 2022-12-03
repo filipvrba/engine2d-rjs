@@ -1,0 +1,59 @@
+import "BasicObject", '../core/objects/basic_object'
+import "Vector2", '../core/math/vector2'
+import "Level", "./level"
+import "SSprite", "../structs/s_sprite"
+
+export default class Tile < BasicObject
+  SPRITE_READY = "gtspr"
+
+  attr_accessor :img, :size
+  attr_reader :sprites
+
+  def initialize size, img = nil
+    super
+
+    @img = img
+    @size = size
+    @sprites = nil
+    @is_error = false
+  end
+
+  def update dt
+    # You need to wait until the functions are
+    # synchronized because the image has a delay.
+    if @img == nil
+      if @is_error == false
+        @is_error = true
+        console.error "For this class '#{self.constructor.name}', there is no image. " +
+                      "(SSprite generation won't take place.)"
+      end
+
+      return
+    end
+
+    unless @img.width == 0 and @img.height == 0
+      if @sprites == nil
+        @sprites = generate_s_sprites @size
+        self.emit_signal SPRITE_READY, @sprites
+      end
+    end
+  end
+
+  def get_s_sprite id
+    return @sprites[id]
+  end
+
+  def generate_s_sprites size
+    w_img     = @img.width
+    h_img     = @img.height
+    dimension = Vector2.new(w_img / size.w, h_img / size.h)
+
+    result_h = { }
+    Level.dimension_loop(dimension) do |vec, i|
+      position_vec = Vector2.new(vec.x * @size.x, vec.y * @size.y)
+      result_h[i] = SSprite.new(position_vec, @size)
+    end
+
+    return result_h
+  end
+end

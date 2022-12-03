@@ -24,8 +24,11 @@ export default class TDRenderer {
       this._canvas.height
     );
 
-    scene.emit_signal(Dispatcher.DRAW, this.renderer);
-    scene.emit_signal(Dispatcher.UPDATE, this._clock.delta_time)
+    scene.emit_signal(Dispatcher.UPDATE, this._clock.delta_time(f_dt => (
+      scene.emit_signal(Dispatcher.PHYSICS_UPDATE, f_dt)
+    )));
+
+    scene.emit_signal(Dispatcher.DRAW, this.renderer)
   }
 };
 

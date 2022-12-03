@@ -62,7 +62,7 @@ export default class Canvas2DElement < HTMLElement
   end
 
   def disconnectedCallback()
-    @scene_r.free
+    @scene_r.free()
     window.removeEventListener RESIZE, @resizeHandler
   end
 end

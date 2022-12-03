@@ -26,7 +26,7 @@ export default class BasicObject < Dispatcher
 
       object.parent = self
 
-      if object.id == undefined
+      unless id == undefined
         object.id = id
       end
 
@@ -76,25 +76,25 @@ export default class BasicObject < Dispatcher
     return self
   end
 
-  def free
+  def free()
     if @children.length > 0
       _children = @children.slice()  # Clone array
       _children.forEach do |child|
-        child.free
+        child.free()
       end
     else
       if @parent
-        free_signals
+        free_signals()
         @parent.remove(self)
       end
     end
 
     if @parent
-      @parent.free
+      @parent.free()
     end
   end
 
-  def free_signals
+  def free_signals()
     # this.signals = nil
     if defined? self.physics_update
       get_scene(true).disconnect(Dispatcher::PHYSICS_UPDATE, self.physics_update_handler)
@@ -122,9 +122,13 @@ export default class BasicObject < Dispatcher
         super_class_name = Object.getPrototypeOf(
                            Object.getPrototypeOf(_parent)).constructor.name
 
-        if _parent.constructor.name == Scene::NAME_SCENE ||
-           super_class_name == Scene::NAME_SCENE
-          _scene  = _parent
+        is_scene_name = _parent.constructor.name == Scene::NAME_SCENE ||
+                        super_class_name == Scene::NAME_SCENE
+        is_level_name = _parent.constructor.name == 'Level' ||
+                        super_class_name == 'Level'
+
+        if is_scene_name or is_level_name
+          _scene = _parent
           break  
         end
       end
@@ -135,7 +139,7 @@ export default class BasicObject < Dispatcher
 
     return _scene 
   end
-
+  
   def find_child(id)
     result = nil
     for i in @children

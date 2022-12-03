@@ -47,4 +47,5 @@ export default class Dispatcher {
 Dispatcher.ADDED = "added";
 Dispatcher.READY = "ready";
 Dispatcher.UPDATE = "update";
-Dispatcher.DRAW = "draw"
+Dispatcher.DRAW = "draw";
+Dispatcher.PHYSICS_UPDATE = "physics_update"
