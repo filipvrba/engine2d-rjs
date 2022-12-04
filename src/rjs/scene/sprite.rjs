@@ -3,6 +3,8 @@ import "Vector2", '../core/math/vector2'
 
 export default class Sprite < Object2D
   attr_accessor :scale, :s_sprite, :img
+  attr_accessor :centered, :offset, :visible_edge
+  attr_reader :global_offset
 
   def initialize s_sprite
     super
@@ -10,6 +12,11 @@ export default class Sprite < Object2D
     @scale = 1
     @s_sprite = s_sprite
     @img = nil
+
+    @centered = false
+    @offset = Vector2.new
+    @global_offset = Vector2.new
+    @visible_edge = false
   end
 
   def ready()
@@ -19,13 +26,39 @@ export default class Sprite < Object2D
   end
 
   def set_position()
-    this.position = Vector2.new(-((@s_sprite.size.w * @scale)/2), -((@s_sprite.size.h * @scale)/2))
+    this.position = centered_position
+  end
+
+  def centered_position
+    Vector2.new(-((@s_sprite.size.w * @scale)/2), -((@s_sprite.size.h * @scale)/2))
+  end
+
+  def update dt
+    if @s_sprite
+      offset_global_pos = Vector2.new(
+        @offset.x + this.global_position.x,
+        @offset.y + this.global_position.y
+      )
+      @global_offset = @centered ?
+          centered_position.clone.add(offset_global_pos)
+        : offset_global_pos
+    end
   end
 
   def draw r
     if @img and @s_sprite
       r.drawImage(@img, @s_sprite.position.x, @s_sprite.position.y, @s_sprite.size.w, @s_sprite.size.h,
-        this.global_position.x, this.global_position.y, @s_sprite.size.w * @scale, @s_sprite.size.h * @scale)
+        @global_offset.x, @global_offset.y, @s_sprite.size.w * @scale, @s_sprite.size.h * @scale)
+    end
+
+    if @visible_edge
+      if @s_sprite
+        r.beginPath()
+        r.strokeStyle = "blue"
+        r.rect(@global_offset.x, @global_offset.y,
+          @s_sprite.size.w * @scale, @s_sprite.size.h * @scale)
+        r.stroke()
+      end
     end
   end
 end

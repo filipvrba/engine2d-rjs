@@ -2,6 +2,7 @@ import "Object2D", '../core/objects/object_2d'
 import "Vector2", '../core/math/vector2'
 
 export default class KinematicBody < Object2D
+  attr_accessor :visible_point
   attr_reader :physics_direction, :is_move, :is_move_vertical
 
   def initialize
@@ -12,6 +13,7 @@ export default class KinematicBody < Object2D
 
     @is_move          = false
     @is_move_vertical = false
+    @visible_point    = false
   end
 
   def update dt
@@ -28,9 +30,38 @@ export default class KinematicBody < Object2D
     end
 
     if @physics_direction.equals(Vector2::UP) or @physics_direction.equals(Vector2::DOWN)
-      @is_move_ladder = true
+      @is_move_vertical = true
     elsif @physics_direction.equals(Vector2::LEFT) or @physics_direction.equals(Vector2::RIGHT)
-      @is_move_ladder = false
+      @is_move_vertical = false
     end
+
+    self.update_global_position()
+  end
+
+  def draw r
+    unless visible_point
+      return
+    end
+
+    green = "#79b415"
+    red   = "#cb3950"
+    width = 20
+    r.lineWidth = 2
+
+    # x
+    r.strokeStyle = red
+    r.beginPath()
+    r.moveTo(self.global_position.x - width, self.global_position.y)
+    r.lineTo(self.global_position.x + width, self.global_position.y)
+    r.fill()
+    r.stroke()
+
+    # y
+    r.strokeStyle = green
+    r.beginPath()
+    r.moveTo(self.global_position.x, self.global_position.y - width)
+    r.lineTo(self.global_position.x, self.global_position.y + width)
+    r.fill()
+    r.stroke()
   end
 end

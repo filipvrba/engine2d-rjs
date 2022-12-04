@@ -1,31 +1,25 @@
 import "BasicObject", '../core/objects/basic_object'
-import "Object2D", '../core/objects/object_2d'
-import "Sprite", './sprite'
 
-export default class AnimationSprite < Object2D
+export default class AnimationSprite < BasicObject
   attr_accessor :frame_speed
   attr_reader :current_tile
 
-  def initialize frame_speed = 0.25
+  def initialize sprite, frame_speed = 0.25
     super
     @handlers = {}
     @handlers_length = lambda { Object.keys(@handlers).length }
 
     @tiles  = BasicObject.new
-    @sprite = Sprite.new
+    @sprite = sprite
 
     @current_tile = nil
     @bitwase = 0
-    @scale = 1
     @time = 0
     @frame_speed = frame_speed
   end
 
   def ready()
     self.add @tiles, 'tiles'
-
-    @sprite.scale = @scale
-    self.add @sprite, 'sprite'
   end
 
   def is_update_unlock
@@ -45,10 +39,6 @@ export default class AnimationSprite < Object2D
     if @current_tile == nil
       return
     end
-
-    # unsafe
-    self.global_position = self.parent.global_position
-    # end
 
     @time += dt
     if @time >= @frame_speed
