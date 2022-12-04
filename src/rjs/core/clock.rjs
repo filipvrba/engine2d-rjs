@@ -16,6 +16,8 @@ export default class Clock
       (0...dt_count).step(1) do |_|
         callback(@fix_dt)
       end
+    else
+      callback(@fix_dt)
     end
 
     @time = current_time
