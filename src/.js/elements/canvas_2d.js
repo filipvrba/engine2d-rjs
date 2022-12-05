@@ -67,7 +67,7 @@ export default class Canvas2DElement extends HTMLElement {
   };
 
   disconnectedCallback() {
-    this._scene_r.free;
+    this._scene_r.free();
 
     window.removeEventListener(
       Canvas2DElement.RESIZE,

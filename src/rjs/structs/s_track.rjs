@@ -1,0 +1,42 @@
+import 'SKey', './s_key'
+
+export default class STrack
+  attr_accessor :track
+  attr_reader :keys
+
+  def initialize track = nil
+    @track = track
+    @keys = []
+    @key_last = nil
+  end
+
+  def add_insert_key time, key
+    unless @track
+      console.warn "There is no declared 'track' value."
+    end 
+
+    @keys << SKey.new(time, key)
+  end
+
+  def is_done
+    result = true
+    (0...keys.length).step(1) do |i| key = @keys[i]
+      unless key.is_done
+        result = false
+        break
+      end
+    end
+    return result
+  end
+
+  def key_last
+    result = @keys[0]
+    (0...keys.length).step(1) do |i| key = @keys[i]
+      if key.is_done
+        result = key
+      end
+    end
+
+    return result
+  end
+end

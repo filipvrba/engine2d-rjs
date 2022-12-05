@@ -16,6 +16,8 @@ export default class Clock {
       for (let _ = 0; _ < dt_count; _++) {
         callback(this._fix_dt)
       }
+    } else {
+      callback(this._fix_dt)
     };
 
     this._time = current_time;

@@ -13,6 +13,4 @@ export default class Level extends Scene {
       }
     }
   }
-};
-
-Level.NAME_SCENE = "Level"
+}

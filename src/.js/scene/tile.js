@@ -1,9 +1,9 @@
-import Object2D from "../core/objects/object2d";
+import BasicObject from "../core/objects/basic_object";
 import Vector2 from "../core/math/vector2";
 import Level from "./level";
 import SSprite from "../structs/s_sprite";
 
-export default class Tile extends Object2D {
+export default class Tile extends BasicObject {
   get img() {
     return this._img
   };

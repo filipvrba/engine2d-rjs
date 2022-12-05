@@ -1,0 +1,10 @@
+export default class SKey
+  attr_accessor :is_done
+  attr_reader :time, :value
+
+  def initialize time, value
+    @time    = time
+    @value   = value
+    @is_done = false
+  end
+end

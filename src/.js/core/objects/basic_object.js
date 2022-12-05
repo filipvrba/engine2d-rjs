@@ -31,7 +31,7 @@ export default class BasicObject extends Dispatcher {
 
   add(object, id=undefined) {
     if (object == this) {
-      console.error(`${this.class.name}.add: object can't be added as a child of itself.`);
+      console.error(`${this.constructor.name}.add: object can't be added as a child of itself.`);
       return this
     };
 
@@ -41,10 +41,13 @@ export default class BasicObject extends Dispatcher {
       if (id != undefined) object.id = id;
       this._children.push(object);
 
-      // TODO: updateGlobalPosition
+      if (typeof object.update_global_position !== 'undefined') {
+        object.update_global_position()
+      };
+
       this.add_signals(object)
     } else {
-      console.error(`${this.class.name}.add: object not an instance of ${this.class.name}`)
+      console.error(`${this.constructor.name}.add: object not an instance of ${this.constructor.name}`)
     };
 
     return this
@@ -93,19 +96,19 @@ export default class BasicObject extends Dispatcher {
     return this
   };
 
-  get free() {
+  free() {
     if (this._children.length > 0) {
       let _children = this._children.slice();
-      _children.forEach(child => child.free)
+      _children.forEach(child => child.free())
     } else if (this._parent) {
-      this.free_signals;
+      this.free_signals();
       this._parent.remove(this)
     };
 
-    if (this._parent) return this._parent.free
+    if (this._parent) this._parent.free()
   };
 
-  get free_signals() {
+  free_signals() {
     // this.signals = nil
     if (typeof this.physics_update !== 'undefined') {
       this.get_scene(true).disconnect(
@@ -122,10 +125,7 @@ export default class BasicObject extends Dispatcher {
     };
 
     if (typeof this.draw !== 'undefined') {
-      return this.get_scene(true).disconnect(
-        Dispatcher.DRAW,
-        this.draw_handler
-      )
+      this.get_scene(true).disconnect(Dispatcher.DRAW, this.draw_handler)
     }
   };
 
@@ -154,40 +154,18 @@ export default class BasicObject extends Dispatcher {
     return _scene
   };
 
-  // def get_scene(is_root = false)
-  //   _scene  = self
-  //   _parent = _scene.parent
-  //   while true
-  //   if is_root
-  //     if _parent == nil
-  //       break
-  //     end
-  //   else
-  //     super_class_name = Object.getPrototypeOf(
-    //                        Object.getPrototypeOf(_parent)).constructor.name
-    //     if _parent.constructor.name == Scene::NAME_SCENE ||
-    //        super_class_name == Scene::NAME_SCENE
-    //       _scene = _parent
-    //       break  
-    //     end
-    //   end
-    //   _scene  = _parent
-    //   _parent = _scene.parent
-    // end
-    // return _scene 
-    // end
-    find_child(id) {
-      let result = null;
+  find_child(id) {
+    let result = null;
 
-      for (let i in this._children) {
-        let child = this._children[i];
+    for (let i in this._children) {
+      let child = this._children[i];
 
-        if (child.id == id) {
-          result = child;
-          break
-        }
-      };
+      if (child.id == id) {
+        result = child;
+        break
+      }
+    };
 
-      return result
-    }
+    return result
   }
+}

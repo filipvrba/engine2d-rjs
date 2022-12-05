@@ -1,0 +1,75 @@
+# Original: https://github.com/filipvrba/graph/blob/master/src/core/objects/animations/animationPlayer.js
+
+import "BasicObject", '../core/objects/basic_object'
+
+export default class AnimationPlayer < BasicObject
+  ANIM_FINISH = "apf"
+
+  def animation
+    return @animations[@current_animation]
+  end
+
+  def initialize
+    super
+
+    @animations = {}
+    @playback_active = false
+    @current_animation = nil
+    @time = 0
+  end
+
+  def update dt
+    unless @playback_active
+      return
+    end
+
+    @time += dt
+
+    unless animation.is_done
+      animation.tracks.forEach do |track|
+        unless track.is_done
+          (0...track.keys.length).step(1) do |i| key = track.keys[i]
+            unless key.is_done
+              update_key(dt, track, key)
+              break
+            end
+          end
+        end
+      end
+    else
+      stop()
+      self.emit_signal(ANIM_FINISH, @current_animation)
+    end
+  end
+
+  def update_key dt, track, key
+    value = (key.value - track.key_last.value) / (key.time - track.key_last.time) * dt
+    value = value ? value : 0
+    apply_str(track, "+= #{value}")
+
+    if @time >= key.time
+      key.is_done = true
+      apply_str(track, "= #{key.value}")
+      return
+    end
+  end
+
+  def apply_str track, str_code = ""
+    return eval("this.#{track.track} #{str_code.toString()}")
+  end
+
+  def add_animation name, animation
+    @animations[name] = animation
+  end
+
+  def play name
+    @current_animation = name
+    @playback_active = true
+  end
+
+  def stop()
+    @current_animation = nil
+    @playback_active = false
+    @time = 0
+  end
+end

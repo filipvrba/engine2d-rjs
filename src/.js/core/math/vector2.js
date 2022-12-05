@@ -108,4 +108,10 @@ export default class Vector2 {
 
     return this
   }
-}
+};
+
+Vector2.UP = new Vector2(0, -1);
+Vector2.DOWN = new Vector2(0, 1);
+Vector2.LEFT = new Vector2(-1, 0);
+Vector2.RIGHT = new Vector2(1, 0);
+Vector2.ZERO = new Vector2(0, 0)

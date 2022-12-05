@@ -15,7 +15,7 @@ export default class BasicObject < Dispatcher
 
   def add object, id = undefined
     if object == self
-      console.error "#{self.class.name}.add: object can't be added as a child of itself."
+      console.error "#{self.constructor.name}.add: object can't be added as a child of itself."
       return self
     end
 
@@ -38,7 +38,7 @@ export default class BasicObject < Dispatcher
 
       add_signals(object)
     else
-      console.error "#{self.class.name}.add: object not an instance of #{self.class.name}"
+      console.error "#{self.constructor.name}.add: object not an instance of #{self.constructor.name}"
     end
 
     return self

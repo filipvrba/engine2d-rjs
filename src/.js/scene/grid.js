@@ -29,6 +29,7 @@ export default class Grid extends BasicObject {
     let x = this._size_v.w * this._scale;
     let y = this._size_v.h * this._scale;
     r.lineWidth = 1;
+    r.strokeStyle = "black";
 
     // x
     for (let i = 0; i < r.canvas.width / x; i++) {

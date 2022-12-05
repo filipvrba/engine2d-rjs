@@ -1,0 +1,54 @@
+import '../css/style.css'
+import "Scene", './core/objects/scene'
+import "BasicObject", './core/objects/basic_object'
+import "TDRenderer", "./core/td_renderer"
+import "Object2D", './core/objects/object2d'
+import "SAnimations", './structs/s_animation'
+import "AnimationPlayer", './scene/animation_player'
+
+document.querySelector('#app').innerHTML = "<canvas-2d></canvas-2d>"
+canvas_2d = document.querySelector('canvas-2d')
+scene_r = canvas_2d.scene_r
+scene_r.connect "resize", lambda { update_scene_pos() }
+
+def update_scene_pos()
+  scene_r.global_position = canvas_2d.win_center_position
+end
+update_scene_pos()
+
+class SandboxAnimation < AnimationPlayer
+  def ready()
+    animation = SAnimations.new
+    track_x = animation.add_track("parent.position.x")
+    track_x.add_insert_key 0, 1
+    track_x.add_insert_key 3, 5
+
+    track_y = animation.add_track("parent.position.y")
+    track_y.add_insert_key 1, 0
+    track_y.add_insert_key 6, 10
+
+    self.add_animation("change_position_x", animation)
+    self.play("change_position_x")
+  end
+end
+
+class Sandbox < Object2D
+  def initialize
+    super
+    @time = 0
+    @sandbox_animation = SandboxAnimation.new
+  end
+
+  def ready()
+    self.add @sandbox_animation, "sandbox_animation"
+  end
+
+  def update dt
+    if @time <= 11
+      @time += dt
+      console.log self.position
+    end
+  end
+end
+
+scene_r.add Sandbox.new, "sandbox"
