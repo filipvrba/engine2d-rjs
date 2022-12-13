@@ -23,4 +23,12 @@ export default class SAnimation
     end
     return result
   end
+
+  def reset()
+    @tracks.forEach do |track|
+      track.keys.forEach do |key|
+        key.is_done = false
+      end
+    end
+  end
 end

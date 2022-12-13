@@ -45,8 +45,9 @@ export default class Canvas2DElement < HTMLElement
   end
 
   def resize()
-    @renderer.set_size(window.innerWidth, window.innerHeight)
-    @scene_r.emit_signal RESIZE
+    size = Vector2.new(window.innerWidth, window.innerHeight)
+    @renderer.set_size(size.w, size.h)
+    @scene_r.emit_signal RESIZE, size
     @scene_r.update_world()
   end
 

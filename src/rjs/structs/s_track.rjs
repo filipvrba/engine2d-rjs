@@ -7,7 +7,6 @@ export default class STrack
   def initialize track = nil
     @track = track
     @keys = []
-    @key_last = nil
   end
 
   def add_insert_key time, key

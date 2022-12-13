@@ -5,6 +5,8 @@ import "BasicObject", '../core/objects/basic_object'
 export default class AnimationPlayer < BasicObject
   ANIM_FINISH = "apf"
 
+  attr_accessor :scale
+
   def animation
     return @animations[@current_animation]
   end
@@ -16,6 +18,8 @@ export default class AnimationPlayer < BasicObject
     @playback_active = false
     @current_animation = nil
     @time = 0
+    @scale = 1
+    @play_callback = nil
   end
 
   def update dt
@@ -37,8 +41,10 @@ export default class AnimationPlayer < BasicObject
         end
       end
     else
-      stop()
+      animation.reset()
       self.emit_signal(ANIM_FINISH, @current_animation)
+      @play_callback.call() if @play_callback
+      stop()
     end
   end
 
@@ -62,12 +68,15 @@ export default class AnimationPlayer < BasicObject
     @animations[name] = animation
   end
 
-  def play name
+  def play name, &callback
+    stop()
     @current_animation = name
     @playback_active = true
+    @play_callback = callback
   end
 
   def stop()
+    @play_callback = nil
     @current_animation = nil
     @playback_active = false
     @time = 0
