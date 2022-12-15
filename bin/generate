@@ -1,3 +1,4 @@
 #!/bin/bash
 
-rjsv -g ~/Documents/code/edu-game-rjs/src/rjs -s src/rjs -o src/.js
+rjsv -g docs/public/engine/rjs -s src/rjs -o docs/public/engine/js &&
+rjsv -c -s docs/public/engine/rjs -o docs/public/engine/js
