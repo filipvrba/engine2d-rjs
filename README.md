@@ -1,22 +1,40 @@
 # Engine2D
-Lehký vykreslovací 2d engine, který je napsán v RJS.
+An *RJS*-based, lightweight 2D rendering engine. 
 
-## Usage
-Tento engine, lze vložit do HTML scriptu.
-Je potřeba přistoupit k souborům, které jsou už vygenerované.
-Vygenerované soubory jsou takové, které jsou jednotné a pospojované
-z různých scriptů ze "*src*" složky. Naleznete je v této složce "*"docs/public/engine"*".
+### Content
+- [1 Usage](#1-usage)
+- [2 Development](#2-development)
+- [3 Examples](#3-examples)
+- [4 Contributors](#4-contributors)
 
-Tento repozitář je hostován na githubu s využití veřejné stránky.
-To nám zaručí, že všechny vygenerované soubory, naleznete na "*https://filipvrba.github.io/engine2d-rjs/*" adrese.
-Aby to plně fungovalo, tak je potřeba přistoupít přímo k danému souboru.
+## 1 Usage
+It is possible to embed this engine in an *HTML* script.
+It is necessary to access already-generated files.
+Using a public page on github, this repository is hosted.
+By doing this, it will be possible to make sure that
+all created files are accessible at *https://filipvrba.github.io/engine2d-rjs/*.
+You must directly read the provided file for it to operate correctly.
 
-*Zde je uveden URL, k přístupu JS souboru:*
+*The JS file can be accessed at this URL:*
 ```txt
 https://filipvrba.github.io/engine2d-rjs/public/engine/js/engine2d_22a1215.js
 ```
 
-## Development
+## 2 Development
+This project is being developed using [**RubyJS-Vite**](https://github.com/filipvrba/ruby-js),
+which creates unified files. From "*src*" folders, these unified files are created.
+All of the scripts will be combined by the [**RubyJS-Vite**](https://github.com/filipvrba/ruby-js) tool,
+which will then generate itself under the name
+"*engine2d*" *(and add the tag date)* to the "*docs/public/engine*" folder. 
 
-## Contributors
+> ### Info
+> You can select the script you want to access from here.
+> There are *JS* and *RJS* files available.
+
+## 3 Examples
+I'll list a few projects that make use of this lightweight 2D rendering engine below.
+
+- [Edu Game](https://github.com/filipvrba/edu-game-rjs) - interactive game for education.
+
+## 4 Contributors
 - [Filip Vrba](https://github.com/filipvrba) - creator and maintainer
