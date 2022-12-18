@@ -1,9 +1,9 @@
 const engineList = document.getElementById('eng-list');
-const location = window.location.href.slice(0, -1);
+const _location = window.location.href.slice(0, -1);
 const p_engine = "public/engine";
 
 async function getEngineLog(callback) {
-    const url = `${location}/${p_engine}/log.txt`;
+    const url = `${_location}/${p_engine}/log.txt`;
     let response = await fetch( url );
 
     if ( response.status === 200 ) {
@@ -19,7 +19,7 @@ function h_addLi(arr, exten = "js") {
 
     let list = "";
     arr.forEach((e) => {
-        const url = `${location}/${p_engine}/${exten}/${e}.${exten}`;
+        const url = `${_location}/${p_engine}/${exten}/${e}.${exten}`;
         list += `<li><a href="${url}">${e}</a></li>\n`;
     })
     engineList.innerHTML = list.trim();
