@@ -1,4 +1,5 @@
 #!/bin/bash
 
 rjsv -g docs/public/engine/rjs -s src/rjs &&
-rjsv -c -s docs/public/engine/rjs -o docs/public/engine/js
+rjsv -c -s docs/public/engine/rjs -o docs/public/engine/js &&
+docs/bin/log

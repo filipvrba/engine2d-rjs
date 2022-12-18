@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+module Helper
+  module_function
+
+  def p_event(message, event = "saved")
+    time = Time.now.strftime("%l:%M:%S %p").lstrip
+    n_app  = File.basename(__FILE__)
+  
+    puts "#{time} [#{n_app}] #{event} #{message}"
+  end
+end
+
+p_engine = "public/engine"
+extension = "js"
+root_path = File.expand_path("../..", __FILE__)
+eng_path = File.join(root_path, p_engine, extension)
+log_path = File.join(root_path, p_engine, "log.txt")
+
+files = Dir.children(eng_path).map { |n| n.sub(".#{extension}", '') }
+
+File.open log_path, "w+" do |f|
+  f.write files.join("\n")
+end
+
+Helper.p_event(log_path.sub(Dir.pwd, '.'))
