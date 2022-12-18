@@ -1,5 +1,5 @@
 const engineList = document.getElementById('eng-list')
-const location = window.location.origin
+const location = window.location.href
 const p_engine = "public/engine"
 
 async function getEngineLog(callback) {
