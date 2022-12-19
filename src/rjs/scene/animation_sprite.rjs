@@ -36,7 +36,7 @@ export default class AnimationSprite < BasicObject
     unless is_update_unlock
       return
     end
-    if @current_tile == nil
+    if @current_tile == nil or @current_tile.sprites == nil
       return
     end
 
