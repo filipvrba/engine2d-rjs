@@ -1,6 +1,8 @@
 # Engine2D
 An *RJS*-based, lightweight 2D rendering engine. 
 
+**Please note that this repository is now archived and no longer actively maintained.**
+
 ### Content
 - [1 Usage](#1-usage)
 - [2 Development](#2-development)
